@@ -10,6 +10,9 @@ public class MyGUI
 {
     // instance variables - replace the example below with your own
     private double speed;
+    
+    //fields to remember pressed position
+    private double startX, startY;
 
     /**
      * Constructor for objects of class MyGUI
@@ -24,6 +27,10 @@ public class MyGUI
         
         //setup slider
         UI.addSlider("Speed", 0, 100, 20, this::setSpeed);
+        
+        //setup mouse listener
+        UI.setLineWidth(10);
+        UI.setMouseListener(this::doMouse);
     }
 
     /**
@@ -42,5 +49,18 @@ public class MyGUI
         //set the speed to new speed
         this.speed = km;
     
+    }
+    
+    /**
+     * callback meathod to mouse listener
+     * only make one callback to the mouse lisenter
+     */
+    public void doMouse(String action, double x, double y) {
+        if (action.equals("pressed"))   {
+            this.startX = x;
+            this.startY = y;
+        } else if (action.equals("released")) {
+            UI.drawLine(this.startX, this.startY, x, y);
+        }
     }
 }
