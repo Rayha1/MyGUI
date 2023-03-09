@@ -1,5 +1,6 @@
 import ecs100.*;
 import java.awt.Color;
+import javax.swing.JColorChooser;
 /**
  * mking some sliders and responding to mouse events
  *
@@ -13,6 +14,10 @@ public class MyGUI
     
     //fields to remember pressed position
     private double startX, startY;
+    
+    //remenber the colour
+    private Color currentColor = Color.black;
+    
 
     /**
      * Constructor for objects of class MyGUI
@@ -24,6 +29,10 @@ public class MyGUI
         
         //setup buttons
         UI.addButton("Quit", UI::quit);
+        
+        //rando colours
+        UI.addButton("ColoUr", this::chooseColour);
+        UI.addButton("Rando ColoUr", this::changeColour);
         
         //setup slider
         UI.addSlider("Speed", 0, 100, 20, this::setSpeed);
@@ -56,11 +65,33 @@ public class MyGUI
      * only make one callback to the mouse lisenter
      */
     public void doMouse(String action, double x, double y) {
+        double width = 100;
+        double height = 100;
         if (action.equals("pressed"))   {
             this.startX = x;
             this.startY = y;
         } else if (action.equals("released")) {
             UI.drawLine(this.startX, this.startY, x, y);
+        } else if (action.equals("clicked")) {
+            UI.fillOval(x - width/2, y - height/2 , width, height);
         }
+    }
+    
+    /**
+     * change to random colour
+     */
+    
+    public void changeColour() {
+        ///rgb values
+        Color col = new Color((float)Math.random(),(float)Math.random(),(float)Math.random());
+        UI.setColor(col);
+    }
+    
+    /**
+     * allows the user to choose the colour form the swign library
+     */
+    public void chooseColour() {
+        this.currentColor = JColorChooser.showDialog(null, "Choose Color", this.currentColor);
+        UI.setColor(this.currentColor);
     }
 }
